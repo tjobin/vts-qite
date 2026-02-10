@@ -19,13 +19,13 @@ def build_hamiltonian_and_state(
         n_elec : int,
         n_activeorbs : int,
         mapper : Mapper = JordanWignerMapper(),
-        ):
+        ) -> tuple[Statevector, SparsePauliOp]:
     """
     Returns the quantum circuit preparing the Hartree Fock state and the Hamiltonian of the system in the active space.
         Args: 
             - geometry : str, geometry string for the molecule. E.g. 'H 0 0 0; H 0 0 0.741;' in units Angstroms
             - basis_set : str, any from the pyscf basis set databank, e.g. 'sto-3g'
-            - active_orb : int, number of active orbitals in active space
+            - n_activeorbs : int, number of active orbitals in active space
             - n_elec : int, number of electrons used in the simulation, the rest is frozen     
             - mapper : qiskit_nature.second_q.mappers, fermion-to-qubit mapper, e.g. JordanWignerMapper() or ParityMapper()
         Returns:
@@ -64,6 +64,5 @@ def build_hamiltonian_and_state(
     core_energy = reduced_problem.hamiltonian.constants['ActiveSpaceTransformer']
 
     hamiltonian_full = hamiltonian_op + SparsePauliOp(["I" * hamiltonian_op.num_qubits], coeffs=[nuclear_repulsion+core_energy])
-
 
     return state, hamiltonian_full
