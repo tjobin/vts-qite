@@ -82,7 +82,7 @@ def make_convergence_plots_per_param(
         params: list[float],
         param_name: str,
         fci_energy: float,
-        labels: list[str] = ['UCCSD', 'EfficientSU2'],
+        labels: list[str] = ['Fixed QITE', 'Adaptive QITE'],
         markers: list[str] = ['o', '^'],
         filename: str = 'default_filename.pdf'
         ) -> None:
@@ -149,9 +149,9 @@ def make_pes_plots_per_param(
         distances: list[float],
         energies_per_type_per_param: list[list[list[float]]], 
         params: list[float],
-        param_name: str,
+        param_name: str | None,
         fci_energies: list[float],
-        labels: list[str] = ['UCCSD', 'EfficientSU2'],
+        labels: list[str] = ['Fixed QITE', 'Adaptive QITE'],
         markers: list[str] = ['o', '^'],
         filename: str = 'default_filename.pdf'
         ) -> None:
@@ -173,24 +173,28 @@ def make_pes_plots_per_param(
             Nothing
     """
 
-    fig = plt.figure(figsize=(3 * len(params), 4))
+    fig = plt.figure()
     gs = fig.add_gridspec(1, len(params), wspace=0)
-    axs = gs.subplots(sharex=True,sharey=True)
-    # fig, axs = plt.subplots(1, len(nshots_list), figsize=(6 * len(nshots_list), 4), sharey=True)  # Horizontal layout with shared y-axis
+    axs = gs.subplots(sharex=True, sharey=True)
+
     for i, param in enumerate(params):
+        print('i', i)
         energies_per_type = [energies_per_type_per_param[i][j] for j in range(len(energies_per_type_per_param[i]))]
-        ax = axs[i] if len(params) > 1 else axs  # Handle case where nshots_list has only one element
-        ax.set_title(f'{param_name} =  {param}')  # Add title for each subplot
+        ax = axs[i] if len(params) > 1 else axs
+        if param_name is not None:
+            ax.set_title(f'{param_name} =  {param}')  # Add title for each subplot
         ax.set_xlabel('Bond distance [Å]')
         if i == 0:
             ax.set_ylabel('Energy [Ha]')
 
         for j, energies in enumerate(energies_per_type):
+            print('j', j)
             ax.plot(distances, energies, label=labels[j], marker=markers[j], alpha=0.7, markersize=8, markeredgewidth=1.5, linestyle=None, linewidth=0, color=colors[j])
         ax.plot(distances, fci_energies, label='Exact FCI', alpha=0.7, markersize=0, markeredgewidth=0, linestyle='--', color='k')
 
     # Create a common legend
     handles, labels = axs[-1].get_legend_handles_labels() if len(params) > 1 else axs.get_legend_handles_labels()
+    print(handles, labels)
     fig.legend(handles, labels, loc='lower center', ncol=len(labels), bbox_to_anchor=(0.5, -0.15))
     plt.subplots_adjust(wspace=0)  # No horizontal space between subplots
     plt.tight_layout()
