@@ -44,6 +44,8 @@ mkdir figs
 - Build the state and the Hamiltonian
 - Run AQITE with run_adaptive_qite(...)
 
+---
+
 ### 📊 Results
  The adaptive method proved 3x more robust to initial parameter selection than standard QITE. 
 
