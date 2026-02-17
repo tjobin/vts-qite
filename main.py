@@ -5,11 +5,14 @@ from qiskit_nature.second_q.mappers import JordanWignerMapper
 from state_and_hamiltonian import build_hamiltonian_and_state
 import numpy as np
 
+## Params for the molecule
 molecule = 'H2'
 geometry= make_geometry(molecule)
 basis_set =  'sto-3g'
 charge = 0
 spin = 0
+
+## Params for the active space
 n_activeorbs = 2
 n_elec = 2
 domain_size = 4
@@ -17,7 +20,7 @@ mapper = JordanWignerMapper()
 
 
 
-## Fixed params for the optimization
+## Fixed params for the evolution
 total_time = 50
 initial_dt = 0.05
 max_theta = 0.05
