@@ -6,7 +6,6 @@ from tqdm import tqdm
 from qiskit import QuantumCircuit
 from qiskit.quantum_info import SparsePauliOp, Statevector, partial_trace
 from qiskit.circuit.library import UnitaryGate
-from qiskit_aer import AerSimulator
 
 # --- Efficient Math Helpers (Cached & Vectorized) ---
 
